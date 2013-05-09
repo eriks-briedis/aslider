@@ -1,0 +1,45 @@
+/*
+ * Ajax Slider v.0.1
+ *
+ * Author Eriks Briedis
+ * http://eriks.designschemers.com
+ * @eriks_b
+ *
+ * Copyright 2013, Eriks Briedis
+ * License: GNU General Public License, version 3 (GPL-3.0)
+ * http://www.opensource.org/licenses/gpl-3.0.html
+ *
+ */
+
+ .aslider {
+ 	position: relative;
+ 	list-style: none;
+ 	overflow: hidden;
+ 	margin: 0;
+ 	padding: 0;
+ }
+ .aslider li {
+ 	position: absolute;
+ }
+ .aslider li img { max-width: 100%; height: auto; }
+ .slide-controls {
+ 	background: url(img/arrows.png) no-repeat 0 0;
+ 	opacity: .5;
+ 	width: 64px;
+ 	height: 100px;
+ 	margin-top: -50px;
+ 	position: absolute;
+ 	z-index: 100;
+ }
+ .slide-controls:hover {
+ 	opacity: 1;
+ }
+ .slide-left {
+ 	left: 0;
+ 	top: 50%;
+ }
+ .slide-right {
+ 	background-position: -64px 0;
+ 	right: 0;
+ 	top: 50%;
+ }
