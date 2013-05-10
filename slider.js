@@ -57,8 +57,8 @@
 		// let's get the animation going
 		var animate = function(){
 
-			$(slides).fadeOut(defaults.effect_duration)
-			$(slides).eq(cur_slide).fadeIn(defaults.effect_duration);
+			$(slides).stop().fadeOut(defaults.effect_duration)
+			$(slides).eq(cur_slide).stop().fadeIn(defaults.effect_duration);
 			create_ctrls();
 
 		}
