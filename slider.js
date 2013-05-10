@@ -11,12 +11,13 @@
  *
  */
 
-(function($){
+ (function($){
 
-	$.fn.aslide = function(options){
+ 	$.fn.aslide = function(options){
 
 		// the default settings
 		var defaults = {
+			responsive : true,
 			width : 700,
 			height : 400,
 			autoplay : false,
@@ -26,9 +27,21 @@
 		};
 
 		var wrapper = this,
-			slider = $(wrapper).selector,
-			slides = $(wrapper).children('li'),
-			cur_slide = 0;
+		slider = $(wrapper).selector,
+		slides = $(wrapper).children('li'),
+		cur_slide = 0;
+
+		var settings = function(){
+
+			if( defaults.responsive == true ){
+				$(window).resize(function() {
+					set_slider_height();
+				});
+				set_slider_height();
+			}else{
+				$(slider).css({'width' : defaults.width, 'height' : defaults.height});
+			}
+		};
 
 		//let's find the index for the next slide we need
 		// @direction = undefined, right or left
@@ -54,11 +67,22 @@
 			}
 		};
 
+		var set_slider_height = function(){
+			var e = $(slides).eq(cur_slide).children('img');
+			defaults.height = e.height();
+			console.log(e.height());
+			$(slider).css({
+					'width' : 100 + '%',
+					'height' : defaults.height
+				});
+		};
+
 		// let's get the animation going
 		var animate = function(){
 
 			$(slides).stop().fadeOut(defaults.effect_duration)
 			$(slides).eq(cur_slide).stop().fadeIn(defaults.effect_duration);
+
 			create_ctrls();
 
 		}
@@ -66,29 +90,27 @@
 		var create_ctrls = function(){
 			if($('#aslider-ctrls') != 0){ //let's remove all children for aslider-ctrls to update the active one
 				$('#aslider-ctrls').children().remove();
-			}
-			$(slider).append('<span id="aslider-ctrls"></span>');
-			for(var i = 0; $(slides).length > i; i++){
-				if(i == cur_slide){
-					$('#aslider-ctrls').append('<span data-slide="'+i+'" class="ctrl-btn ctrl-active"></span>');
-				}else{
-					$('#aslider-ctrls').append('<span data-slide="'+i+'" class="ctrl-btn"></span>');
-				}
-			}
-			$('.ctrl-btn').click(function(){
-				var t_slide = $(this).context.getAttribute('data-slide');
-				get_slide(false, t_slide);
-				animate();
-			});
 		}
+		$(slider).append('<span id="aslider-ctrls"></span>');
+		for(var i = 0; $(slides).length > i; i++){
+			if(i == cur_slide){
+				$('#aslider-ctrls').append('<span data-slide="'+i+'" class="ctrl-btn ctrl-active"></span>');
+			}else{
+				$('#aslider-ctrls').append('<span data-slide="'+i+'" class="ctrl-btn"></span>');
+			}
+		}
+		$('.ctrl-btn').click(function(){
+			var t_slide = $(this).context.getAttribute('data-slide');
+			get_slide(false, t_slide);
+			animate();
+		});
+	}
 
-		var init = function(){
+	var init = function(){
 
 			// adding classes to ul an li tags and hiding the whole thing
 			$(slides).css('display', 'none');
 			$(slider).addClass('aslider').children('li').addClass('slide');
-			$(slider).css({'width' : defaults.width, 'height' : defaults.height});
-
 
 			// adding prev and next controls
 			$(slider).append('<span class="slide-controls slide-left" data-direction="left"></span>');
@@ -102,8 +124,9 @@
 				get_slide(direction);
 				animate();
 			});
-
 			animate();
+			settings();
+
 		}
 
 		//let's do it!

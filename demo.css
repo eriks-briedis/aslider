@@ -12,9 +12,9 @@
 
  #wrapper {
  	background: #fff;
- 	width: 960px;
+ 	width: 70%;
  	height: 900px;
- 	margin: 0 auto;
+ 	margin: 0 15%;
  	padding-top: 5px;
  }
 
@@ -25,5 +25,13 @@
 
  #aslider{
  	margin: 0 auto;
- 	border: 3px solid #2c3e50;
+ 	border-top: 3px solid #2c3e50;
+ 	border-bottom: 3px solid #2c3e50;
  }
+
+@media only screen and (max-width: 640px) {
+	#wrapper {
+		width: 100%;
+		margin: 0;
+	}
+}

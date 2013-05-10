@@ -7,9 +7,7 @@ Just an open source project of another image slider
 
 ## Features to implement
 
-* slide selection buttons
 * slide transition
-* responsive
 * swipe
 * ajax requests for slide content
 
@@ -21,9 +19,14 @@ Just an open source project of another image slider
 * added get_slide function for determining the next slide to show
 * added demo.css with demo styles
 
+### v.0.1.2
+
+* added responsive support
+* added slider controls
+
 ## Known bugs
 
-* slider height doesn't adapt to images
+* @cur_slide doesn't get updated when switching between ctrls and prev/next
 
 Author **Eriks Briedis**
 
