@@ -13,13 +13,15 @@
 	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
 	<link rel="stylesheet" href="slider.css">
+    <link rel="stylesheet" href="demo.css">
 </head>
 <body>
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
             <![endif]-->
 
-            <div style="width: 700px; margin: 0 auto">
+            <div id="wrapper">
+                <h1 id="page_title">ASlider</h1>
 	            <ul id="aslider">
 	            	<li><img src="img/img-1.jpg" /></li>
 	            	<li><img src="img/img-2.jpg" /></li>
@@ -31,11 +33,7 @@
             <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
             <script src="slider.js"></script>
             <script>
-            jQuery(document).ready(function($) {
-
-            	$('#aslider').aslide();
-
-            });
+            $('#aslider').aslide();
             </script>
         </body>
         </html>
