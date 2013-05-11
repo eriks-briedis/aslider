@@ -1,5 +1,5 @@
 /*
- * Ajax Slider v.0.1.1
+ * Ajax Slider v.0.1.3
  *
  * Author Eriks Briedis
  * http://eriks.designschemers.com
@@ -17,19 +17,20 @@
 
 		// the default settings
 		var defaults = {
-			responsive : true,
+			responsive : false, // accepts true or false
 			width : 700,
-			height : 400,
-			autoplay : false,
-			effect : 'fade',
-			effect_duration : 600,
-			slide_duration : 1500
+			height : 400, // only if responive is set to true - slider width and height in px
+			autoplay : false, // acepts true or false
+			effect : 'slide', // accepts fade or slide
+			effect_duration : 400, // how long it takes to go to a new slide in ms
+			slide_duration : 3000 // how long one slide is displayed - with autoplay only
 		};
 
 		var wrapper = this,
-		slider = $(wrapper).selector,
-		slides = $(wrapper).children('li'),
-		cur_slide = 0;
+			slider = $(wrapper).selector,
+			slides = $(wrapper).children('li'),
+			cur_slide = 0,
+			prev_slide = null;
 
 		var settings = function(){
 
@@ -47,6 +48,7 @@
 		// @direction = undefined, right or left
 		// @t_slide = int. if defined jump to that slide number
 		var get_slide = function(direction, t_slide){
+			prev_slide = cur_slide; // storing the last slide for animations
 			if(t_slide != undefined){
 				cur_slide = t_slide;
 			}else if(direction == undefined || direction == 'right'){
@@ -67,10 +69,12 @@
 			}
 		};
 
+		// function for making the slider responsive
+		// set width to 100%
+		// set height to current image height
 		var set_slider_height = function(){
 			var e = $(slides).eq(cur_slide).children('img');
 			defaults.height = e.height();
-			console.log(e.height());
 			$(slider).css({
 					'width' : 100 + '%',
 					'height' : defaults.height
@@ -80,10 +84,75 @@
 		// let's get the animation going
 		var animate = function(){
 
-			$(slides).stop().fadeOut(defaults.effect_duration)
-			$(slides).eq(cur_slide).stop().fadeIn(defaults.effect_duration);
+			// switch statement for animation effects
+			switch(defaults.effect){
+				case 'fade':
+					$(slides).stop().transition({
+						'opacity' : 0
+					}, defaults.effect_duration).css({
+						'display' : 'none'
+					});
+					$(slides).eq(cur_slide).css({
+						'opacity' : 0,
+						'display' : 'block'
+					}).stop().transition({
+						'opacity' : 1
+					}, defaults.effect_duration);
+					break;
+				case 'slide':
+					var slider_width = $(slider).width(); // get the width of the slider for correct slide amount
 
+					if( cur_slide > prev_slide || prev_slide == null ){
+						$(slides).eq(cur_slide).css({
+							'display' : 'block',
+							'left' : -slider_width
+						}).animate({
+							'left' : 0
+						}, defaults.effect_duration, 'swing');
+
+						if( prev_slide != null ){
+							$(slides).eq(prev_slide).animate({
+								'left' : slider_width
+							}, defaults.effect_duration, 'swing', function(){
+								$(slides).eq(prev_slide).css({
+									'display' : 'none'
+								});
+							});
+						}
+					}else{
+						// slide right to left
+						$(slides).eq(cur_slide).css({
+							'display' : 'block',
+							'left' : slider_width,
+							'z-index' : 100
+						}).animate({
+							'left' : 0
+						}, defaults.effect_duration);
+
+						$(slides).eq(prev_slide).animate({
+							'left' : -slider_width
+						}, 'swing', function(){
+							$(this).css({
+								'display' : 'none',
+								'z-index' : 0
+							});
+						});
+					}
+					break;
+				default:
+					alert('Not a recognized effect');
+					break;
+			}
 			create_ctrls();
+
+			// if autoplay is enabled
+			// setting a timer for each slide
+			if( defaults.autoplay == true ){
+				setTimeout(function(){
+					get_slide();
+					animate();
+				}, defaults.slide_duration);
+			}
 
 		}
 
